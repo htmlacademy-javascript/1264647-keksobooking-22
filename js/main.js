@@ -29,31 +29,3 @@ const getRandomInclusive = (min, max, numberDigit) => {
 
 getRandomIntInclusive(0, 10);
 getRandomInclusive(2, 10, 5);
-
-/* for (let i = 0; i < 1000; i++) {
-  const min = 1;
-  const max = 10;
-
-  let number;
-
-  number = getRandomIntInclusive(min, max);
-  //number = getRandomInclusive(min, max, 5);
-
-  console.log(number);
-
-  if (number == max) {
-    console.log('max: ' +  number);
-  }
-
-  if (number == min) {
-    console.log('min: ' +  number);
-  }
-
-  if (number > max) {
-    console.log('error max: ' +  number);
-  }
-
-  if (number < min) {
-    console.log('error min: ' +  number);
-  }
-} */
