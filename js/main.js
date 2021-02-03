@@ -1,30 +1,36 @@
 'use strict'
 
+const swapPlaces = (min, max) => [max, min] = [min, max];
+
+// Возвращаем целые числа
 // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 const getRandomIntInclusive = (min, max) => {
-  if (min >= 0) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return (max > min) ? Math.floor(Math.random() * (max - min + 1)) + min: false + ': max меньше или равен min';
-  }
-
-  return false + ': min меньше нуля';
-}
-
-const getRandomInclusive = (min, max, numberDigit) => {
-
-  if (min >= 0) {
-
-    if (!numberDigit) {
-      // https://qna.habr.com/q/493201
-      const getNumberDigit = (number) => number.toString().includes('.') ? number.toString().split('.').pop().length : 0;
-      numberDigit = Math.max(getNumberDigit(min), getNumberDigit(max));
+  if (min >= 0 && max >= 0 && min !== max) {
+    if (max < min) {
+      swapPlaces(min, max);
     }
 
-    return (max > min) ? (Math.random() * (max - min) + min).toFixed(numberDigit) : false + ': max меньше или равен min';
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  return false + ': min меньше нуля';
+  return null;
+}
+
+// Возвращаем числа с плавающей точкой
+const getRandomInclusive = (min, max, numberDigit) => {
+
+  if (min >= 0 && max >= 0 && min !== max) {
+    if (max < min) {
+      swapPlaces(min, max);
+    }
+
+    return parseFloat((Math.random() * (max - min) + min).toFixed(numberDigit));
+  }
+
+  return null;
 }
 
 getRandomIntInclusive(0, 10);
