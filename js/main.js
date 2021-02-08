@@ -1,8 +1,27 @@
 'use strict'
 
-const swapPlaces = (min, max) => [max, min] = [min, max];
+const [FIRST_ELEMENT, LAST_ELEMENT] = [1, 8];
+const [MIN_PRICE, MAX_PRICE] = [100, 10000];
+const TYPES = ['palace', 'flat', 'house', 'bungalow'];
+const [MIN_ROOMS, MAX_ROOMS] = [1, 8];
+const [MIN_QUESTS, MAX_QUESTS] = [1, 20];
+const TIME_EXAMPLES = ['12:00', '13:00', '14:00'];
+const TOTAL_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const TOTAL_PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+];
+
+const [X_MIN, X_MAX] = [35.65000, 35.70000];
+const [Y_MIN, Y_MAX] = [139.70000, 139.80000];
+const DIGIT_NUMBER = 5;
+
+const AD_QUANTITY = 10;
 
 // УТИЛИТАРНЫЕ ФУНКЦИИ
+const swapPlaces = (min, max) => [min, max] = [max, min];
+
 // Возвращаем целое число
 // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 const getRandomIntInclusive = (min, max) => {
@@ -35,39 +54,44 @@ const getRandomInclusive = (min, max, numberDigit) => {
 };
 
 // СОЗДАЕМ МАССИВ ОБЪЯВЛЕНИЙ
-const TYPES = ['palace', 'flat', 'house', 'bungalow'];
-const TIME_EXAMPLES = ['12:00', '13:00', '14:00'];
-const TOTAL_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const TOTAL_PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
-];
-
-const AD_COUNT = 10;
-
-const getRandomArrayElement = (array) => {
-  return array[getRandomIntInclusive(0, array.length - 1)];
+const getRandomArrayElement = (items) => {
+  return items[getRandomIntInclusive(0, items.length - 1)];
 }
 
-//массив случайной длинны с неповторяющимися элементами
-const getArrayRandomLenght = (array) => {
-  return array.slice(0, getRandomIntInclusive(1, array.length)).sort(() => Math.random() - 0.5);
-}
+// перетасовка массива
+const shuffle = (items) => {
+
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = getRandomIntInclusive(0, i);
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  return items;
+};
+
+// Массив случайной длинны с неповторяющимися элементами
+const getArrayRandomLenght = (items) => {
+  return shuffle(items.slice()).slice(0, getRandomIntInclusive(1, items.length));
+};
 
 const createAd = () => {
+  const [xСoordinate, yСoordinate] = [
+    getRandomInclusive(X_MIN, X_MAX, DIGIT_NUMBER),
+    getRandomInclusive(Y_MIN, Y_MAX, DIGIT_NUMBER),
+  ];
+
   return {
     author: {
-      avatar: 'img/avatars/user0' + getRandomIntInclusive(1, 8) + '.png',
+      avatar: 'img/avatars/user0' + getRandomIntInclusive(FIRST_ELEMENT, LAST_ELEMENT) + '.png',
     },
 
     offer: {
       title: 'Милая, уютная квартирка в центре Токио',
-      address: getRandomInclusive(34.65000, 34.70000, 5)+ ', ' + getRandomInclusive(138.70000, 138.80000, 5),
-      price: getRandomIntInclusive(100, 10000),
+      address: xСoordinate + ', ' + yСoordinate,
+      price: getRandomIntInclusive(MIN_PRICE, MAX_PRICE),
       type: getRandomArrayElement(TYPES),
-      rooms: getRandomIntInclusive(1, 8),
-      guests: getRandomIntInclusive(1, 20),
+      rooms: getRandomIntInclusive(MIN_ROOMS, MAX_ROOMS),
+      guests: getRandomIntInclusive(MIN_QUESTS, MAX_QUESTS),
       checkin: getRandomArrayElement(TIME_EXAMPLES),
       checkout: getRandomArrayElement(TIME_EXAMPLES),
       features: getArrayRandomLenght(TOTAL_FEATURES),
@@ -76,11 +100,11 @@ const createAd = () => {
     },
 
     location: {
-      x: getRandomInclusive(35.65000, 35.70000, 5),
-      y: getRandomInclusive(139.70000, 139.80000, 5),
+      x: xСoordinate,
+      y: yСoordinate,
     },
   }
 };
 
-const createAds = (count) => new Array(count).fill('').map(() => createAd());
-createAds(AD_COUNT);
+const createAds = (quantity) => new Array(quantity).fill('').map(() => createAd());
+createAds(AD_QUANTITY);
