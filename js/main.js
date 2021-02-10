@@ -58,7 +58,7 @@ const getRandomArrayElement = (items) => {
   return items[getRandomIntInclusive(0, items.length - 1)];
 }
 
-// перетасовка массива
+// Перетасовка массива
 const shuffle = (items) => {
 
   for (let i = items.length - 1; i > 0; i--) {
@@ -70,12 +70,12 @@ const shuffle = (items) => {
 };
 
 // Массив случайной длинны с неповторяющимися элементами
-const getArrayRandomLenght = (items) => {
+const getArrayRandomLength = (items) => {
   return shuffle(items.slice()).slice(0, getRandomIntInclusive(1, items.length));
 };
 
 const createAd = () => {
-  const [xСoordinate, yСoordinate] = [
+  const [xCoordinate, yCoordinate] = [
     getRandomInclusive(X_MIN, X_MAX, DIGIT_NUMBER),
     getRandomInclusive(Y_MIN, Y_MAX, DIGIT_NUMBER),
   ];
@@ -87,21 +87,21 @@ const createAd = () => {
 
     offer: {
       title: 'Милая, уютная квартирка в центре Токио',
-      address: xСoordinate + ', ' + yСoordinate,
+      address: xCoordinate + ', ' + yCoordinate,
       price: getRandomIntInclusive(MIN_PRICE, MAX_PRICE),
       type: getRandomArrayElement(TYPES),
       rooms: getRandomIntInclusive(MIN_ROOMS, MAX_ROOMS),
       guests: getRandomIntInclusive(MIN_QUESTS, MAX_QUESTS),
       checkin: getRandomArrayElement(TIME_EXAMPLES),
       checkout: getRandomArrayElement(TIME_EXAMPLES),
-      features: getArrayRandomLenght(TOTAL_FEATURES),
+      features: getArrayRandomLength(TOTAL_FEATURES),
       description: 'Небольшая уютная квартира',
-      photos: getArrayRandomLenght(TOTAL_PHOTOS),
+      photos: getArrayRandomLength(TOTAL_PHOTOS),
     },
 
     location: {
-      x: xСoordinate,
-      y: yСoordinate,
+      x: xCoordinate,
+      y: yCoordinate,
     },
   }
 };
