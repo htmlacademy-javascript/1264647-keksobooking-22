@@ -3,7 +3,7 @@ import {
   getRandomInclusive,
   getArrayRandomLength,
   getRandomArrayElement
-  
+
 } from './util.js';
 
 const [FIRST_ELEMENT, LAST_ELEMENT] = [1, 8];
@@ -22,8 +22,6 @@ const TOTAL_PHOTOS = [
 const [X_MIN, X_MAX] = [35.65000, 35.70000];
 const [Y_MIN, Y_MAX] = [139.70000, 139.80000];
 const DIGIT_NUMBER = 5;
-
-const AD_QUANTITY = 10;
 
 // Создаем массив объявлений
 const createAd = () => {
@@ -59,4 +57,5 @@ const createAd = () => {
 };
 
 const createAds = (quantity) => new Array(quantity).fill('').map(() => createAd());
-createAds(AD_QUANTITY);
+
+export { createAds };
