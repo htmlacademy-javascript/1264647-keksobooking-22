@@ -76,14 +76,6 @@ ads.forEach((ad) => {
   addData(ad.offer.checkin, `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`, mapPopup, '.popup__text--time', ad.offer.checkout);
   addData(ad.offer.description, ad.offer.description, mapPopup, '.popup__description');
 
-  //mapPopup.querySelector('.popup__title').textContent = ad.offer.title;
-  //mapPopup.querySelector('.popup__text--address').textContent = ad.offer.address;
-  //mapPopup.querySelector('.popup__text--price').textContent = `${ad.offer.price} ₽/ночь`;
-  //mapPopup.querySelector('.popup__type').textContent = compareTypes(ad.offer.type);
-  //mapPopup.querySelector('.popup__text--capacity').textContent =  `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
-  //mapPopup.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
-  //mapPopup.querySelector('.popup__description').textContent = ad.offer.description;
-
   const listFeatures = mapPopup.querySelector('.popup__features');
   addElements(listFeatures, ad.offer.features, 'li');
   hideElement (listFeatures);
