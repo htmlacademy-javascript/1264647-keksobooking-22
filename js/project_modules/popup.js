@@ -1,11 +1,5 @@
-import { createAds } from './data.js';
-
-const AD_QUANTITY = 10;
-const ads = createAds(AD_QUANTITY);
-
 const mapCanvas = document.querySelector('#map-canvas');
 const mapPopupTemplate = document.querySelector('#card').content.querySelector('.popup');
-const fragmentAds = document.createDocumentFragment();
 
 const compareTypes = (type) => {
   switch (type) {
@@ -20,78 +14,108 @@ const compareTypes = (type) => {
   }
 };
 
-const addElements = (box, items, htmlTag) => {
-  box.innerHTML = '';
+const addElements = (parent, items, htmlTag) => {
+  parent.innerHTML = '';
 
-  items.forEach((element) => {
-    let tag;
+  items.forEach((item) => {
+    let childTag;
 
     if (htmlTag === 'li') {
-      tag = `<li class="popup__feature popup__feature--${element}"></li>`;
+      childTag = `<li class="popup__feature popup__feature--${item}"></li>`;
     }
 
     if (htmlTag === 'img') {
-      tag = `<img src="${element}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`;
+      childTag = `<img src="${item}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`;
     }
 
-    box.insertAdjacentHTML('beforeend', tag);
+    parent.insertAdjacentHTML('beforeend', childTag);
   });
 
-  return box;
+  if (!parent.hasChildNodes()) {
+    parent.classList.add('hidden');
+  }
+
+  return parent;
 }
 
-const addData = (data, stringData, parentElement, classElement, dataTwo = 1) => {
-  const element = parentElement.querySelector(classElement);
-
-  if (data === null ||
-      dataTwo === null ||
-      data === undefined ||
-      dataTwo === undefined ||
-      data === 'null, null' ||
-      data === '') {
-
-    element.classList.add('hidden');
-    return
-  }
-
-  element.textContent = stringData;
-};
-
-const hideElement = (element) => {
-  if (element.hasChildNodes()) {
-    return
-  }
-
-  element.classList.add('hidden');
-};
-
-ads.forEach((ad) => {
+const createPopup = (ad) => {
   const mapPopup = mapPopupTemplate.cloneNode(true);
+  let element;
+  const hideElement = (item) => item.classList.add('hidden');
 
-  addData(ad.offer.title, ad.offer.title, mapPopup, '.popup__title');
-  addData(ad.offer.address, ad.offer.address,  mapPopup, '.popup__text--address');
-  addData(ad.offer.price, `${ad.offer.price} ₽/ночь`, mapPopup, '.popup__text--price');
-  addData(ad.offer.type, compareTypes(ad.offer.type), mapPopup, '.popup__type');
-  addData(ad.offer.rooms, `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`, mapPopup, '.popup__text--capacity', ad.offer.guests);
-  addData(ad.offer.checkin, `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`, mapPopup, '.popup__text--time', ad.offer.checkout);
-  addData(ad.offer.description, ad.offer.description, mapPopup, '.popup__description');
-
-  const listFeatures = mapPopup.querySelector('.popup__features');
-  addElements(listFeatures, ad.offer.features, 'li');
-  hideElement (listFeatures);
-
-  const boxPhotos = mapPopup.querySelector('.popup__photos');
-  addElements(boxPhotos, ad.offer.photos, 'img');
-  hideElement (boxPhotos);
-
-  if (ad.author.avatar === '') {
-    mapPopup.querySelector('.popup__avatar').classList.add('hidden');
-
+  //Аватарка
+  element = mapPopup.querySelector('.popup__avatar');
+  if (ad.author.avatar) {
+    element.src = ad.author.avatar;
   } else {
-    mapPopup.querySelector('.popup__avatar').src = ad.author.avatar;
+    hideElement(element);
   }
 
-  fragmentAds.appendChild(mapPopup);
-});
+  //Заголовок
+  element = mapPopup.querySelector('.popup__title');
+  if (ad.offer.title) {
+    element.textContent = ad.offer.title;
+  } else {
+    hideElement(element);
+  }
 
-mapCanvas.appendChild(fragmentAds.children[0]);
+  //Адрес
+  element = mapPopup.querySelector('.popup__text--address');
+  if (ad.offer.address) {
+    element.textContent = ad.offer.address;
+  } else {
+    hideElement(element);
+  }
+
+  //Цена
+  element = mapPopup.querySelector('.popup__text--price');
+  if (ad.offer.price) {
+    element.innerHTML = `${ad.offer.price} <span>₽/ночь</span>`;
+  } else {
+    hideElement(element);
+  }
+
+  //Тип жилья
+  element = mapPopup.querySelector('.popup__type');
+  if (ad.offer.type) {
+    element.textContent = compareTypes(ad.offer.type);
+  } else {
+    hideElement(element);
+  }
+
+  //Вместимость жилья
+  element = mapPopup.querySelector('.popup__text--capacity');
+  if (ad.offer.rooms && ad.offer.guests) {
+    element.textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
+  } else {
+    hideElement(element);
+  }
+
+  //Время аренды
+  element = mapPopup.querySelector('.popup__text--time');
+  if (ad.offer.checkin && ad.offer.checkout) {
+    element.textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
+  } else {
+    hideElement(element);
+  }
+
+  //Описание жилья
+  element = mapPopup.querySelector('.popup__description');
+  if (ad.offer.description) {
+    element.textContent = ad.offer.description;
+  } else {
+    hideElement(element);
+  }
+
+  //Фичи
+  element = mapPopup.querySelector('.popup__features');
+  addElements(element, ad.offer.features, 'li');
+
+  //Фотографии жилья
+  element = mapPopup.querySelector('.popup__photos');
+  addElements(element, ad.offer.photos, 'img');
+
+  mapCanvas.appendChild(mapPopup);
+};
+
+export { createPopup };
