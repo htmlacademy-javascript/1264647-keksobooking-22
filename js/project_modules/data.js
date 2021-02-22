@@ -9,8 +9,8 @@ import {
 const [FIRST_ELEMENT, LAST_ELEMENT] = [1, 8];
 const [MIN_PRICE, MAX_PRICE] = [100, 10000];
 const TYPES = ['palace', 'flat', 'house', 'bungalow'];
-const [MIN_ROOMS, MAX_ROOMS] = [1, 8];
-const [MIN_QUESTS, MAX_QUESTS] = [1, 20];
+const [MIN_ROOMS, MAX_ROOMS] = [2, 8];
+const [MIN_QUESTS, MAX_QUESTS] = [2, 20];
 const TIME_EXAMPLES = ['12:00', '13:00', '14:00'];
 const TOTAL_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const TOTAL_PHOTOS = [
