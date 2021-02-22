@@ -14,7 +14,13 @@ const compareTypes = (type) => {
   }
 };
 
-const addElements = (parent, items, htmlTag) => {
+const hideElement = (item) => item.classList.add('hidden');
+
+const addInnerElements = (parent, items, htmlTag) => {
+  if (items.length === 0) {
+    return hideElement(parent);
+  }
+
   parent.innerHTML = '';
 
   items.forEach((item) => {
@@ -30,18 +36,11 @@ const addElements = (parent, items, htmlTag) => {
 
     parent.insertAdjacentHTML('beforeend', childTag);
   });
-
-  if (!parent.hasChildNodes()) {
-    parent.classList.add('hidden');
-  }
-
-  return parent;
 }
 
 const createPopup = (ad) => {
   const mapPopup = mapPopupTemplate.cloneNode(true);
   let element;
-  const hideElement = (item) => item.classList.add('hidden');
 
   //Аватарка
   element = mapPopup.querySelector('.popup__avatar');
@@ -69,7 +68,7 @@ const createPopup = (ad) => {
 
   //Цена
   element = mapPopup.querySelector('.popup__text--price');
-  if (ad.offer.price) {
+  if (ad.offer.price || ad.offer.price === 0) {
     element.innerHTML = `${ad.offer.price} <span>₽/ночь</span>`;
   } else {
     hideElement(element);
@@ -85,7 +84,7 @@ const createPopup = (ad) => {
 
   //Вместимость жилья
   element = mapPopup.querySelector('.popup__text--capacity');
-  if (ad.offer.rooms && ad.offer.guests) {
+  if (ad.offer.rooms && ad.offer.guests || ad.offer.guests === 0) {
     element.textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
   } else {
     hideElement(element);
@@ -108,12 +107,10 @@ const createPopup = (ad) => {
   }
 
   //Фичи
-  element = mapPopup.querySelector('.popup__features');
-  addElements(element, ad.offer.features, 'li');
+  addInnerElements(mapPopup.querySelector('.popup__features'), ad.offer.features, 'li');
 
   //Фотографии жилья
-  element = mapPopup.querySelector('.popup__photos');
-  addElements(element, ad.offer.photos, 'img');
+  addInnerElements(mapPopup.querySelector('.popup__photos'), ad.offer.photos, 'img');
 
   mapCanvas.appendChild(mapPopup);
 };

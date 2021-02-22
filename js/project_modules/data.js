@@ -23,18 +23,6 @@ const [X_MIN, X_MAX] = [35.65000, 35.70000];
 const [Y_MIN, Y_MAX] = [139.70000, 139.80000];
 const DIGIT_NUMBER = 5;
 
-// const [FIRST_ELEMENT, LAST_ELEMENT] = [1, 8];
-// const [MIN_PRICE, MAX_PRICE] = [];
-// const TYPES = [];
-// const [MIN_ROOMS, MAX_ROOMS] = [];
-// const [MIN_QUESTS, MAX_QUESTS] = [];
-// const TIME_EXAMPLES = [];
-// const TOTAL_FEATURES = [];
-// const TOTAL_PHOTOS = [];
-
-// const [X_MIN, X_MAX] = [];
-// const [Y_MIN, Y_MAX] = [];
-
 // Создаем массив объявлений
 const createAd = () => {
   const [xCoordinate, yCoordinate] = [
@@ -45,14 +33,11 @@ const createAd = () => {
   return {
     author: {
       avatar: 'img/avatars/user0' + getRandomIntInclusive(FIRST_ELEMENT, LAST_ELEMENT) + '.png',
-      //avatar: '',
     },
 
     offer: {
       title: 'Милая, уютная квартирка в центре Токио',
-      //title: '',
       address: xCoordinate + ', ' + yCoordinate,
-      //address: '',
       price: getRandomIntInclusive(MIN_PRICE, MAX_PRICE),
       type: getRandomArrayElement(TYPES),
       rooms: getRandomIntInclusive(MIN_ROOMS, MAX_ROOMS),
@@ -61,7 +46,6 @@ const createAd = () => {
       checkout: getRandomArrayElement(TIME_EXAMPLES),
       features: getArrayRandomLength(TOTAL_FEATURES),
       description: 'Небольшая уютная квартира',
-      //description: '',
       photos: getArrayRandomLength(TOTAL_PHOTOS),
     },
 
