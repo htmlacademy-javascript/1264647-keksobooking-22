@@ -1,4 +1,3 @@
-const mapCanvas = document.querySelector('#map-canvas');
 const mapPopupTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const compareTypes = (type) => {
@@ -112,7 +111,7 @@ const createPopup = (ad) => {
   //Фотографии жилья
   addInnerElements(mapPopup.querySelector('.popup__photos'), ad.offer.photos, 'img');
 
-  mapCanvas.appendChild(mapPopup);
+  return mapPopup;
 };
 
 export { createPopup };

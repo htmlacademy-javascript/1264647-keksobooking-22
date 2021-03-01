@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <title>Кексобукинг</title>
 </head>
 <body>
@@ -62,7 +63,7 @@
             <label class="map__feature map__feature--elevator" for="filter-elevator">Лифт</label>
             <input type="checkbox" name="features" value="conditioner" id="filter-conditioner" class="map__checkbox visually-hidden">
             <label class="map__feature map__feature--conditioner" for="filter-conditioner">Кондиционер</label>
-           </fieldset>
+          </fieldset>
         </form>
       </div>
     </section>
@@ -228,6 +229,7 @@
     </div>
   </template>
 
+  <script defer src="leaflet/leaflet.js"></script>
   <script defer type="module" src="js/main.js"></script>
 </body>
 </html>
