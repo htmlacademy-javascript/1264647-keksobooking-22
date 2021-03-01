@@ -3,6 +3,19 @@ import { createPopup } from './popup.js';
 
 /* global L:readonly */
 const AD_QUANTITY = 10;
+const [TOKYO_LAT, TOKYO_LNG] = [35.6895, 139.692];
+const TOKYO_ZOOM = 10;
+
+const MAIN_ICON_URL = '../img/main-pin.svg';
+const MAIN_ICON_SIZES = [50, 82];
+const MAIN_ANCHOR_SIZES = [25, 82];
+
+const [MAIN_MARKER_LAT, MAIN_MARKER_LNG] = [35.6895, 139.692];
+
+const ICON_URL = '../img/pin.svg';
+const ICON_SIZES = [25, 41];
+const ANCHOR_SIZES = [12.5, 41];
+
 const ads = createAds(AD_QUANTITY);
 
 const formMap = document.querySelector('.map__filters');
@@ -13,37 +26,40 @@ const formAdElements = formAd.querySelectorAll('.ad-form-header, .ad-form__eleme
 
 const addressAd = formAd.querySelector('#address');
 
-const desableElements = (parent, children) => {
+const disableElements = (parent, children) => {
   parent.classList.add('ad-form--disabled');
 
-  for (let element of children) {
-    element.disabled = true;
+  for (const child of children) {
+    child.disabled = true;
   }
 };
 
 const enableElements = (parent, children) => {
   parent.classList.remove('ad-form--disabled');
 
-  for (let element of children) {
-    element.disabled = false;
+  for (const child of children) {
+    child.disabled = false;
   }
 };
 
 const getAddress = (marker, input) => {
-  let source = marker.getLatLng();
+  const source = marker.getLatLng();
   input.value = (source.lat).toFixed(5) + ', '+ (source.lng).toFixed(5);
 };
 
+
 //Деактивация фильтра карты и формы заполнения объявления
-desableElements(formMap, formMapElements);
-desableElements(formAd, formAdElements);
+disableElements(formMap, formMapElements);
+disableElements(formAd, formAdElements);
+
 
 //Иницилизация карты, фильтра карты и формы заполнения объявления
 const map = L.map('map-canvas')
   .setView({
-    lat: 35.6895,
-    lng: 139.692,
-  }, 10);
+    lat: TOKYO_LAT,
+    lng: TOKYO_LNG,
+
+  }, TOKYO_ZOOM);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -56,17 +72,18 @@ L.tileLayer(
     enableElements(formAd, formAdElements);
   });
 
+
 //Создаем маркеры и балуны
 const mainIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
-  iconSize: [50, 82],
-  iconAnchor: [25, 82],
+  iconUrl: MAIN_ICON_URL,
+  iconSize: MAIN_ICON_SIZES,
+  iconAnchor: MAIN_ANCHOR_SIZES,
 });
 
 const mainMarker = L.marker(
   {
-    lat: 35.6895,
-    lng: 139.692,
+    lat: MAIN_MARKER_LAT,
+    lng: MAIN_MARKER_LNG,
   },
   {
     draggable: true,
@@ -79,9 +96,9 @@ mainMarker.addTo(map);
 ads.forEach((ad) => {
 
   const markerIcon = L.icon({
-    iconUrl: '../img/pin.svg',
-    iconSize: [25, 41],
-    iconAnchor: [12.5, 41],
+    iconUrl: ICON_URL,
+    iconSize: ICON_SIZES,
+    iconAnchor: ANCHOR_SIZES,
   });
 
   const marker = L.marker(
@@ -99,9 +116,10 @@ ads.forEach((ad) => {
     .bindPopup(createPopup(ad));
 });
 
+
 //Блокируем поле адресс для редактирования, передаем в него координаты меток
 addressAd.readOnly = true;
 
 getAddress(mainMarker, addressAd);
 
-mainMarker.on('moveend', (evt) => getAddress(evt.target, addressAd));
+mainMarker.on('move', (evt) => getAddress(evt.target, addressAd));
