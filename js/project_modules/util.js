@@ -1,61 +1,28 @@
-// Меняем местами значения переменных
-const swapPlaces = (min, max) => [min, max] = [max, min];
+const ALERT_SHOW_TIME = 5000;
+const alertPlace = document.querySelector('.map__canvas');
 
-// Возвращаем целое число
-// https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-const getRandomIntInclusive = (min, max) => {
-  if (min >= 0 && max >= 0 && min !== max) {
-    if (max < min) {
-      swapPlaces(min, max);
-    }
+const showAlert = (message) => {
+  const messageContainer = document.createElement('div');
+  messageContainer.style.position = 'absolute';
+  messageContainer.style.zIndex = 10000;
+  messageContainer.style.top = 0;
+  messageContainer.style.right = 0;
+  messageContainer.style.left = 0;
+  messageContainer.style.padding = '20px 50px';
+  messageContainer.style.textAlign = 'center';
+  messageContainer.style.fontSize = '25px';
+  messageContainer.style.color = '#003153';
+  messageContainer.style.backgroundColor = '#9b2d30';
 
-    min = Math.ceil(min);
-    max = Math.floor(max);
+  messageContainer.textContent = message;
 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  alertPlace.append(messageContainer);
 
-  return null;
-};
+  setTimeout(
+    () => messageContainer.remove(),
 
-// Возвращаем число с плавающей точкой
-const getRandomInclusive = (min, max, numberDigit) => {
-
-  if (min >= 0 && max >= 0 && min !== max) {
-    if (max < min) {
-      swapPlaces(min, max);
-    }
-
-    return parseFloat((Math.random() * (max - min) + min).toFixed(numberDigit));
-  }
-
-  return null;
-};
-
-// Перетасовка массива
-const shuffle = (items) => {
-
-  for (let i = items.length - 1; i > 0; i--) {
-    const j = getRandomIntInclusive(0, i);
-    [items[i], items[j]] = [items[j], items[i]];
-  }
-
-  return items;
-};
-
-// Массив случайной длинны с неповторяющимися элементами
-const getArrayRandomLength = (items) => {
-  return shuffle(items.slice()).slice(0, getRandomIntInclusive(1, items.length));
-};
-
-// Получить случайный элемент массива
-const getRandomArrayElement = (items) => {
-  return items[getRandomIntInclusive(0, items.length - 1)];
+    ALERT_SHOW_TIME,
+  );
 }
 
-export {
-  getRandomIntInclusive,
-  getRandomInclusive,
-  getArrayRandomLength,
-  getRandomArrayElement
-};
+export { showAlert }

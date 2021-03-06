@@ -1,4 +1,5 @@
-import { createAds } from './data.js';
+import { getData } from './api.js'
+import { showAlert } from './util.js'
 import { createPopup } from './popup.js';
 
 /* global L:readonly */
@@ -15,8 +16,6 @@ const [MAIN_MARKER_LAT, MAIN_MARKER_LNG] = [35.6895, 139.692];
 const ICON_URL = '../img/pin.svg';
 const ICON_SIZES = [25, 41];
 const ANCHOR_SIZES = [12.5, 41];
-
-const ads = createAds(AD_QUANTITY);
 
 const formMap = document.querySelector('.map__filters');
 const formMapElements = formMap.querySelectorAll('.map__filter, .map__features');
@@ -40,6 +39,32 @@ const enableElements = (parent, children) => {
   for (const child of children) {
     child.disabled = false;
   }
+};
+
+const createMarkersAds = (ads) => {
+
+  ads.forEach((ad) => {
+
+    const markerIcon = L.icon({
+      iconUrl: ICON_URL,
+      iconSize: ICON_SIZES,
+      iconAnchor: ANCHOR_SIZES,
+    });
+
+    const marker = L.marker(
+      {
+        lat: ad.location.lat,
+        lng: ad.location.lng,
+      },
+      {
+        icon: markerIcon,
+      },
+    );
+
+    marker
+      .addTo(map)
+      .bindPopup(createPopup(ad));
+  });
 };
 
 const getAddress = (marker, input) => {
@@ -93,28 +118,11 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-ads.forEach((ad) => {
+getData(
+  (ads) => createMarkersAds(ads.slice(0, AD_QUANTITY)),
 
-  const markerIcon = L.icon({
-    iconUrl: ICON_URL,
-    iconSize: ICON_SIZES,
-    iconAnchor: ANCHOR_SIZES,
-  });
-
-  const marker = L.marker(
-    {
-      lat: ad.location.x,
-      lng: ad.location.y,
-    },
-    {
-      icon: markerIcon,
-    },
-  );
-
-  marker
-    .addTo(map)
-    .bindPopup(createPopup(ad));
-});
+  () => showAlert('Не удалось загрузить похожие объявления!'),
+);
 
 
 //Блокируем поле адресс для редактирования, передаем в него координаты меток
