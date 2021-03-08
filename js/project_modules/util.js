@@ -1,28 +1,39 @@
-const ALERT_SHOW_TIME = 5000;
-const alertPlace = document.querySelector('.map__canvas');
+//Вкл - Выкл элементов
+const disableElements = (parent, children) => {
+  parent.classList.add('ad-form--disabled');
 
-const showAlert = (message) => {
-  const messageContainer = document.createElement('div');
-  messageContainer.style.position = 'absolute';
-  messageContainer.style.zIndex = 10000;
-  messageContainer.style.top = 0;
-  messageContainer.style.right = 0;
-  messageContainer.style.left = 0;
-  messageContainer.style.padding = '20px 50px';
-  messageContainer.style.textAlign = 'center';
-  messageContainer.style.fontSize = '25px';
-  messageContainer.style.color = '#003153';
-  messageContainer.style.backgroundColor = '#9b2d30';
+  for (const child of children) {
+    child.disabled = true;
+  }
+};
 
-  messageContainer.textContent = message;
+const enableElements = (parent, children) => {
+  parent.classList.remove('ad-form--disabled');
 
-  alertPlace.append(messageContainer);
+  for (const child of children) {
+    child.disabled = false;
+  }
+};
 
-  setTimeout(
-    () => messageContainer.remove(),
+//Получение адреса метки
+const getAddress = (marker, input) => {
+  const source = marker.getLatLng();
+  input.value = (source.lat).toFixed(5) + ', '+ (source.lng).toFixed(5);
+};
 
-    ALERT_SHOW_TIME,
-  );
-}
+//Проверка событий
+const isClickEvent = (evt) => {
+  return evt.type === 'click';
+};
 
-export { showAlert }
+const isEscEvent = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+};
+
+export {
+  disableElements,
+  enableElements,
+  getAddress,
+  isClickEvent,
+  isEscEvent
+};

@@ -1,5 +1,12 @@
-import { getData } from './api.js'
-import { showAlert } from './util.js'
+import { getData } from './api.js';
+
+import {
+  disableElements,
+  enableElements,
+  getAddress
+} from './util.js';
+
+import { showAlert } from './notification.js';
 import { createPopup } from './popup.js';
 
 /* global L:readonly */
@@ -25,21 +32,23 @@ const formAdElements = formAd.querySelectorAll('.ad-form-header, .ad-form__eleme
 
 const addressAd = formAd.querySelector('#address');
 
-const disableElements = (parent, children) => {
-  parent.classList.add('ad-form--disabled');
+//Создаем маркеры и балуны
+const mainIcon = L.icon({
+  iconUrl: MAIN_ICON_URL,
+  iconSize: MAIN_ICON_SIZES,
+  iconAnchor: MAIN_ANCHOR_SIZES,
+});
 
-  for (const child of children) {
-    child.disabled = true;
-  }
-};
-
-const enableElements = (parent, children) => {
-  parent.classList.remove('ad-form--disabled');
-
-  for (const child of children) {
-    child.disabled = false;
-  }
-};
+const mainMarker = L.marker(
+  {
+    lat: MAIN_MARKER_LAT,
+    lng: MAIN_MARKER_LNG,
+  },
+  {
+    draggable: true,
+    icon: mainIcon,
+  },
+);
 
 const createMarkersAds = (ads) => {
 
@@ -67,9 +76,9 @@ const createMarkersAds = (ads) => {
   });
 };
 
-const getAddress = (marker, input) => {
-  const source = marker.getLatLng();
-  input.value = (source.lat).toFixed(5) + ', '+ (source.lng).toFixed(5);
+const rollBackMap = () => {
+  map.setView([TOKYO_LAT, TOKYO_LNG]);
+  mainMarker.setLatLng([MAIN_MARKER_LAT, MAIN_MARKER_LNG]);
 };
 
 
@@ -93,36 +102,17 @@ L.tileLayer(
   },
 ).addTo(map)
   .on('load', () => {
+    mainMarker.addTo(map);
+
+    getData(
+      (ads) => createMarkersAds(ads.slice(0, AD_QUANTITY)),
+
+      () => showAlert('Не удалось загрузить похожие объявления!'),
+    );
+
     enableElements(formMap, formMapElements);
     enableElements(formAd, formAdElements);
   });
-
-
-//Создаем маркеры и балуны
-const mainIcon = L.icon({
-  iconUrl: MAIN_ICON_URL,
-  iconSize: MAIN_ICON_SIZES,
-  iconAnchor: MAIN_ANCHOR_SIZES,
-});
-
-const mainMarker = L.marker(
-  {
-    lat: MAIN_MARKER_LAT,
-    lng: MAIN_MARKER_LNG,
-  },
-  {
-    draggable: true,
-    icon: mainIcon,
-  },
-);
-
-mainMarker.addTo(map);
-
-getData(
-  (ads) => createMarkersAds(ads.slice(0, AD_QUANTITY)),
-
-  () => showAlert('Не удалось загрузить похожие объявления!'),
-);
 
 
 //Блокируем поле адресс для редактирования, передаем в него координаты меток
@@ -131,3 +121,5 @@ addressAd.readOnly = true;
 getAddress(mainMarker, addressAd);
 
 mainMarker.on('move', (evt) => getAddress(evt.target, addressAd));
+
+export { rollBackMap };
