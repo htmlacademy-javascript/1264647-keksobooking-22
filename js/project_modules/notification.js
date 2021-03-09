@@ -5,6 +5,12 @@ const alertPlace = document.querySelector('.map__canvas');
 
 const noticePlase = document.querySelector('main');
 
+const noticeFailTemplate = document.querySelector('#error').content.querySelector('.error');
+const noticeFail = noticeFailTemplate.cloneNode(true);
+
+const noticeLuckTemplate = document.querySelector('#success').content.querySelector('.success');
+const noticeLuck = noticeLuckTemplate.cloneNode(true);
+
 //Ошибка запроса данных
 const showAlert = (message) => {
   const messageContainer = document.createElement('div');
@@ -35,16 +41,7 @@ const showAlert = (message) => {
 const showNotice = (fail) => {
   let notice;
 
-  if (fail) {
-    const noticeFailTemplate = document.querySelector('#error').content.querySelector('.error');
-    const noticeFail = noticeFailTemplate.cloneNode(true);
-    notice = noticeFail;
-
-  } else {
-    const noticeLuckTemplate = document.querySelector('#success').content.querySelector('.success');
-    const noticeLuck = noticeLuckTemplate.cloneNode(true);
-    notice = noticeLuck;
-  }
+  (fail) ? notice = noticeFail : notice = noticeLuck;
 
   notice.style.zIndex = 10000;
   noticePlase.append(notice);
