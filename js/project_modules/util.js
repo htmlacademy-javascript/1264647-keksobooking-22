@@ -1,61 +1,39 @@
-// Меняем местами значения переменных
-const swapPlaces = (min, max) => [min, max] = [max, min];
+//Вкл - Выкл элементов
+const disableElements = (parent, children) => {
+  parent.classList.add('ad-form--disabled');
 
-// Возвращаем целое число
-// https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-const getRandomIntInclusive = (min, max) => {
-  if (min >= 0 && max >= 0 && min !== max) {
-    if (max < min) {
-      swapPlaces(min, max);
-    }
-
-    min = Math.ceil(min);
-    max = Math.floor(max);
-
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  for (const child of children) {
+    child.disabled = true;
   }
-
-  return null;
 };
 
-// Возвращаем число с плавающей точкой
-const getRandomInclusive = (min, max, numberDigit) => {
+const enableElements = (parent, children) => {
+  parent.classList.remove('ad-form--disabled');
 
-  if (min >= 0 && max >= 0 && min !== max) {
-    if (max < min) {
-      swapPlaces(min, max);
-    }
-
-    return parseFloat((Math.random() * (max - min) + min).toFixed(numberDigit));
+  for (const child of children) {
+    child.disabled = false;
   }
-
-  return null;
 };
 
-// Перетасовка массива
-const shuffle = (items) => {
-
-  for (let i = items.length - 1; i > 0; i--) {
-    const j = getRandomIntInclusive(0, i);
-    [items[i], items[j]] = [items[j], items[i]];
-  }
-
-  return items;
+//Получение адреса метки
+const getAddress = (marker, input) => {
+  const source = marker.getLatLng();
+  input.value = (source.lat).toFixed(5) + ', '+ (source.lng).toFixed(5);
 };
 
-// Массив случайной длинны с неповторяющимися элементами
-const getArrayRandomLength = (items) => {
-  return shuffle(items.slice()).slice(0, getRandomIntInclusive(1, items.length));
+//Проверка событий
+const isClickEvent = (evt) => {
+  return evt.type === 'click';
 };
 
-// Получить случайный элемент массива
-const getRandomArrayElement = (items) => {
-  return items[getRandomIntInclusive(0, items.length - 1)];
-}
+const isEscEvent = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+};
 
 export {
-  getRandomIntInclusive,
-  getRandomInclusive,
-  getArrayRandomLength,
-  getRandomArrayElement
+  disableElements,
+  enableElements,
+  getAddress,
+  isClickEvent,
+  isEscEvent
 };
